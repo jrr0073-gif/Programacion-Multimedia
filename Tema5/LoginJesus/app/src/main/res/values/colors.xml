@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="fondo">#1B2A41</color>
+    <color name="texto">#F2F2F2</color>
+    <color name="campo">#324A5F</color>
+    <color name="boton">#0C7C99</color>
+    <color name="verde_ok">#4CAF50</color>
+    <color name="rojo_error">#FF5252</color>
 </resources>

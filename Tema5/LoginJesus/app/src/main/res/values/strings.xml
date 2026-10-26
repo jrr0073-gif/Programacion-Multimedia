@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">LoginJesus</string>
+    <string name="correo_label">Correo electrónico</string>
+    <string name="pass_label">Contraseña</string>
+    <string name="hint_correo">tu correo</string>
+    <string name="hint_pass">tu contraseña</string>
+    <string name="recordar">Recordar contraseña</string>
+    <string name="continuar">Continuar</string>
 </resources>
