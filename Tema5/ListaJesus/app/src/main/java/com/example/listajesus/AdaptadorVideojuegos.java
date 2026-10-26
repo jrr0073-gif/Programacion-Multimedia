@@ -15,14 +15,14 @@ import java.util.ArrayList;
 public class AdaptadorVideojuegos
         extends RecyclerView.Adapter<AdaptadorVideojuegos.ViewHolder> {
 
-    // La lista de datos que va a pintar
+    // La lista de datos que va a poner
     private final ArrayList<Videojuego> videojuegos;
 
     public AdaptadorVideojuegos(ArrayList<Videojuego> videojuegos) {
         this.videojuegos = videojuegos;
     }
 
-    //  guarda las vistas de una fila
+    //guarda las vistas de una fila
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivImagen;
         TextView tvTitulo;
@@ -50,6 +50,12 @@ public class AdaptadorVideojuegos
         holder.tvTitulo.setText(videojuego.getTitulo());
         holder.tvSubtitulo.setText(videojuego.getPlataforma());
         holder.ivImagen.setImageResource(videojuego.getImagen());
+
+        // al colocar la fila se hace un toast
+        holder.itemView.setOnClickListener(v ->
+                Toast.makeText(v.getContext(),
+                        videojuego.getTitulo(),
+                        Toast.LENGTH_SHORT).show());
     }
 
     @Override

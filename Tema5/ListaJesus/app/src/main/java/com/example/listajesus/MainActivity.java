@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        //Los juegos
+        // Juegos
         ArrayList<Videojuego> videojuegos = new ArrayList<>();
         videojuegos.add(new Videojuego("Zelda", "Nintendo Switch", R.drawable.zelda));
         videojuegos.add(new Videojuego("Mario Kart", "Nintendo Switch", R.drawable.mario));
@@ -36,9 +37,12 @@ public class MainActivity extends AppCompatActivity {
         videojuegos.add(new Videojuego("Minecraft", "PC", R.drawable.sonic));
         videojuegos.add(new Videojuego("Fortnite", "PC", R.drawable.pacman));
 
-        // orden de la lista
+        // orden de las filas
         RecyclerView rvLista = findViewById(R.id.rvLista);
         rvLista.setLayoutManager(new LinearLayoutManager(this));
+        // separador
+        rvLista.addItemDecoration(
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         rvLista.setAdapter(new AdaptadorVideojuegos(videojuegos));
     }
 }
