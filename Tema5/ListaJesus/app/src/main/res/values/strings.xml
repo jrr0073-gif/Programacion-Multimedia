@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ListaJesus</string>
+    <string name="imagen_elemento">Imagen del elemento</string>
 </resources>
