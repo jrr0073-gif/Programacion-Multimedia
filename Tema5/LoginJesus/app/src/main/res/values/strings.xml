@@ -9,4 +9,7 @@
     <string name="ok">Usuario y contraseña correctos</string>
     <string name="ok_recordar">Usuario y contraseña correctos. Almacenados para siguientes accesos</string>
     <string name="fallo">Usuario y/o contraseña incorrectos</string>
+    <string name="error_correo">Escribe tu correo</string>
+    <string name="error_pass">Escribe la contraseña</string>
+    <string name="demasiados">Demasiados intentos</string>
 </resources>

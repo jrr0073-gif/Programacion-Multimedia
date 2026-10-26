@@ -1,9 +1,10 @@
 package com.example.loginjesus;
-import android.os.Bundle;
+
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CORREO_VALIDO = "jesus@correo.com";
     private static final String PASS_VALIDA = "1234";
+
+    //contador de intentos fallidos
+    private int intentos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,23 @@ public class MainActivity extends AppCompatActivity {
             String correo = etCorreo.getText().toString().trim();
             String pass = etPass.getText().toString();
 
+            //campos vacíos
+            boolean hayVacios = false;
+            if (correo.isEmpty()) {
+                etCorreo.setError(getString(R.string.error_correo));
+                hayVacios = true;
+            }
+            if (pass.isEmpty()) {
+                etPass.setError(getString(R.string.error_pass));
+                hayVacios = true;
+            }
+            if (hayVacios) {
+                return;
+            }
+
+            //extra
             if (correo.equals(CORREO_VALIDO) && pass.equals(PASS_VALIDA)) {
+                intentos = 0;
                 if (swRecordar.isChecked()) {
                     tvMensaje.setText(R.string.ok_recordar);
                 } else {
@@ -47,8 +67,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 tvMensaje.setTextColor(getColor(R.color.verde_ok));
             } else {
-                tvMensaje.setText(R.string.fallo);
+                intentos++;
                 tvMensaje.setTextColor(getColor(R.color.rojo_error));
+                if (intentos >= 3) {
+                    btnContinuar.setEnabled(false);
+                    tvMensaje.setText(R.string.demasiados);
+                    Toast.makeText(this, R.string.demasiados, Toast.LENGTH_SHORT).show();
+                } else {
+                    tvMensaje.setText(R.string.fallo);
+                }
             }
         });
     }
