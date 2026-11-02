@@ -11,5 +11,8 @@
     <string name="fallo">Usuario y/o contraseña incorrectos</string>
     <string name="error_correo">Escribe tu correo</string>
     <string name="error_pass">Escribe la contraseña</string>
-    <string name="demasiadosIntentos">Demasiados intentos</string>
+    <string name="demasiados">Demasiados intentos</string>
+    <string name="menu_titulo">Menú principal</string>
+    <string name="menu_saludo">Hola, %1$s</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
 </resources>
