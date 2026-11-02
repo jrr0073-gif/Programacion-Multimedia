@@ -1,5 +1,6 @@
 package com.example.loginjesus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,15 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            //extra
+            //datos correctos: abrir el menú
             if (correo.equals(CORREO_VALIDO) && pass.equals(PASS_VALIDA)) {
                 intentos = 0;
-                if (swRecordar.isChecked()) {
-                    tvMensaje.setText(R.string.ok_recordar);
-                } else {
-                    tvMensaje.setText(R.string.ok);
-                }
-                tvMensaje.setTextColor(getColor(R.color.verde_ok));
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                intent.putExtra(MenuActivity.EXTRA_CORREO, correo);
+                startActivity(intent);
+                finish();
             } else {
                 intentos++;
                 tvMensaje.setTextColor(getColor(R.color.rojo_error));
