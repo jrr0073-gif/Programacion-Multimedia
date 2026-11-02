@@ -1,6 +1,7 @@
 package com.example.loginjesus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CORREO_VALIDO = "jesus@correo.com";
     private static final String PASS_VALIDA = "1234";
+
+    private static final String PREFS = "sesion";
+    private static final String CLAVE_CORREO = "correo";
 
     //contador de intentos fallidos
     private int intentos = 0;
@@ -40,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         Button btnContinuar = findViewById(R.id.btnContinuar);
         TextView tvMensaje = findViewById(R.id.tvMensaje);
 
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+
+        //al abrir: si hay correo guardado, escribirlo y activar el interruptor
+        String correoGuardado = prefs.getString(CLAVE_CORREO, null);
+        if (correoGuardado != null) {
+            etCorreo.setText(correoGuardado);
+            swRecordar.setChecked(true);
+            etPass.requestFocus();
+        }
+
         btnContinuar.setOnClickListener(v -> {
             String correo = etCorreo.getText().toString().trim();
             String pass = etPass.getText().toString();
@@ -58,9 +72,16 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            //datos correctos: abrir el menú
+            //datos correctos: guardar o borrar el correo y abrir el menú
             if (correo.equals(CORREO_VALIDO) && pass.equals(PASS_VALIDA)) {
                 intentos = 0;
+
+                if (swRecordar.isChecked()) {
+                    prefs.edit().putString(CLAVE_CORREO, correo).apply();
+                } else {
+                    prefs.edit().remove(CLAVE_CORREO).apply();
+                }
+
                 Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 intent.putExtra(MenuActivity.EXTRA_CORREO, correo);
                 startActivity(intent);
