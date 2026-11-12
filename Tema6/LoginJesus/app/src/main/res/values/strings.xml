@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">LoginJesus</string>
+    <string name="correo_label">Correo electrónico</string>
+    <string name="pass_label">Contraseña</string>
+    <string name="hint_correo">tu correo</string>
+    <string name="hint_pass">tu contraseña</string>
+    <string name="recordar">Recordar correo</string>
+    <string name="continuar">Continuar</string>
+    <string name="ok">Usuario y contraseña correctos</string>
+    <string name="ok_recordar">Usuario y contraseña correctos. Almacenados para siguientes accesos</string>
+    <string name="fallo">Usuario y/o contraseña incorrectos</string>
+    <string name="error_correo">Escribe tu correo</string>
+    <string name="error_pass">Escribe la contraseña</string>
+    <string name="demasiados">Demasiados intentos</string>
+    <string name="menu_titulo">Menú principal</string>
+    <string name="menu_saludo">Hola, %1$s</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+</resources>
