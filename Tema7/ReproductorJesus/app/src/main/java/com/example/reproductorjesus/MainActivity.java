@@ -107,5 +107,23 @@ public class MainActivity extends AppCompatActivity {
         btnPausa.setOnClickListener(v -> player.pause());
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        handler.post(actualizador);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        player.pause();
+        handler.removeCallbacks(actualizador);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(actualizador);
+        player.release();
+    }
 }
