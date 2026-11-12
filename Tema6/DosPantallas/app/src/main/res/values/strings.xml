@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">DosPantallasJesus</string>
+    <string name="menu_titulo">Menú principal</string>
+    <string name="menu_saludo">Hola, %1$s</string>
+    <string name="menu_cerrar_sesion">Cerrar sesión</string>
+</resources>
