@@ -16,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private TextView tvActual, tvTotal;
     private boolean arrastrando = false;
+    private SoundPool soundPool;
+    private int idCaca, idCampana, idSilbato, idSiu;
+    private int cargados = 0;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private final Runnable actualizador = new Runnable() {
@@ -96,6 +101,44 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnPlay = findViewById(R.id.btnPlay);
         Button btnPausa = findViewById(R.id.btnPausa);
+// --- Efectos de sonido ---
+        Button btnCaca = findViewById(R.id.btnCaca);
+        Button btnCampana = findViewById(R.id.btnCampana);
+        Button btnSilbato = findViewById(R.id.btnSilbato);
+        Button btnSiu = findViewById(R.id.btnSiu);
+
+        AudioAttributes atributos = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(4)
+                .setAudioAttributes(atributos)
+                .build();
+
+// El listener va ANTES de los load()
+        soundPool.setOnLoadCompleteListener((sp, idSonido, estado) -> {
+            if (estado == 0) {
+                cargados++;
+                if (cargados == 4) {
+                    btnCaca.setEnabled(true);
+                    btnCampana.setEnabled(true);
+                    btnSilbato.setEnabled(true);
+                    btnSiu.setEnabled(true);
+                }
+            }
+        });
+
+        idCaca    = soundPool.load(this, R.raw.caca, 1);
+        idCampana = soundPool.load(this, R.raw.campana, 1);
+        idSilbato = soundPool.load(this, R.raw.silbato, 1);
+        idSiu     = soundPool.load(this, R.raw.siu, 1);
+
+        btnCaca.setOnClickListener(v -> soundPool.play(idCaca, 1f, 1f, 1, 0, 1f));
+        btnCampana.setOnClickListener(v -> soundPool.play(idCampana, 1f, 1f, 1, 0, 1f));
+        btnSilbato.setOnClickListener(v -> soundPool.play(idSilbato, 1f, 1f, 1, 0, 1f));
+        btnSiu.setOnClickListener(v -> soundPool.play(idSiu, 1f, 1f, 1, 0, 1f));
 
         btnPlay.setOnClickListener(v -> {
             if (player.getPlaybackState() == Player.STATE_ENDED) {
