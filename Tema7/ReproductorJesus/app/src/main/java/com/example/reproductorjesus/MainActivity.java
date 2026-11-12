@@ -1,27 +1,21 @@
 package com.example.reproductorjesus;
 
-import android.media.AudioAttributes;
-import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import java.util.Locale;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.media3.common.MediaItem;
-import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,10 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean arrastrando = false;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private SoundPool soundPool;
-    private int idCaca, idCampana, idSilbato, idSiu;
-    private int cargados = 0;
-
     private final Runnable actualizador = new Runnable() {
         @Override
         public void run() {
@@ -43,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 seekBar.setProgress((int) pos);
                 tvActual.setText(formatear(pos));
             }
-            handler.postDelayed(this, 500);
+            handler.postDelayed(this, 500); // se repite cada medio segundo
         }
     };
 
@@ -54,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -63,16 +54,17 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+
         // --- Reproductor ---
         player = new ExoPlayer.Builder(this).build();
         Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.puntalon);
         player.setMediaItem(MediaItem.fromUri(uri));
         player.prepare();
-
         seekBar = findViewById(R.id.seekBar);
         tvActual = findViewById(R.id.tvActual);
         tvTotal = findViewById(R.id.tvTotal);
 
+// La duración solo se conoce cuando el reproductor está listo
         player.addListener(new Player.Listener() {
             @Override
             public void onPlaybackStateChanged(int estado) {
@@ -81,13 +73,6 @@ public class MainActivity extends AppCompatActivity {
                     seekBar.setMax((int) duracion);
                     tvTotal.setText(formatear(duracion));
                 }
-            }
-
-            // DIAGNÓSTICO: borrar este método cuando funcione
-            @Override
-            public void onPlayerError(PlaybackException error) {
-                Toast.makeText(MainActivity.this, "Error: " + error.getMessage(),
-                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -104,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar sb) {
-                player.seekTo(sb.getProgress());
+                player.seekTo(sb.getProgress()); // salta al soltar
                 arrastrando = false;
             }
         });
@@ -113,75 +98,14 @@ public class MainActivity extends AppCompatActivity {
         Button btnPausa = findViewById(R.id.btnPausa);
 
         btnPlay.setOnClickListener(v -> {
-            // DIAGNÓSTICO: borrar este Toast cuando funcione
-            Toast.makeText(this, "Play pulsado, estado " + player.getPlaybackState(),
-                    Toast.LENGTH_SHORT).show();
-
             if (player.getPlaybackState() == Player.STATE_ENDED) {
-                player.seekTo(0);
+                player.seekTo(0); // si terminó, empieza desde el principio
             }
             player.play();
+
         });
         btnPausa.setOnClickListener(v -> player.pause());
 
-        // --- Efectos de sonido ---
-        Button btnCaca = findViewById(R.id.btnCaca);
-        Button btnCampana = findViewById(R.id.btnCampana);
-        Button btnSilbato = findViewById(R.id.btnSilbato);
-        Button btnSiu = findViewById(R.id.btnSiu);
-
-        AudioAttributes atributos = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(4)
-                .setAudioAttributes(atributos)
-                .build();
-
-        // El listener va ANTES de los load()
-        soundPool.setOnLoadCompleteListener((sp, idSonido, estado) -> {
-            if (estado == 0) {
-                cargados++;
-                if (cargados == 4) {
-                    btnCaca.setEnabled(true);
-                    btnCampana.setEnabled(true);
-                    btnSilbato.setEnabled(true);
-                    btnSiu.setEnabled(true);
-                }
-            }
-        });
-
-        idCaca    = soundPool.load(this, R.raw.caca, 1);
-        idCampana = soundPool.load(this, R.raw.campana, 1);
-        idSilbato = soundPool.load(this, R.raw.silbato, 1);
-        idSiu     = soundPool.load(this, R.raw.siu, 1);
-
-        btnCaca.setOnClickListener(v -> soundPool.play(idCaca, 1f, 1f, 1, 0, 1f));
-        btnCampana.setOnClickListener(v -> soundPool.play(idCampana, 1f, 1f, 1, 0, 1f));
-        btnSilbato.setOnClickListener(v -> soundPool.play(idSilbato, 1f, 1f, 1, 0, 1f));
-        btnSiu.setOnClickListener(v -> soundPool.play(idSiu, 1f, 1f, 1, 0, 1f));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        handler.post(actualizador);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        player.pause();
-        handler.removeCallbacks(actualizador);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacks(actualizador);
-        player.release();
-        soundPool.release();
-    }
 }
